@@ -31,32 +31,36 @@
                                     <h5 class="card-title text-success">{{ $produit->name }}</h5>
                                     <p class="card-text text-muted">Prix : {{ $produit->prix }} dt</p>
                                     <p class="card-text text-muted">Stock : {{ $produit->stock }}</p>
+                                    <!-- si il est connecte-->
                                     @if (auth()->check() )
+                                    <!--si le stock superieur a 0 on fait ces botton   -->
                                     @if($produit->stock>0)
+                                    <!-- si le produit deja ajouter dans le panier -->
                                     @if(isset($panier[$produit->id]))
+                                    <!-- si on peut ajouter au panier cad la quantite inferieur au stock -->
                                     @if($panier[$produit->id]['quantite']<$produit->stock)
-                                        <form action="{{ route('panier.ajouter', ['id' => $produit->id]) }}" method="POST">
-                                            @csrf
+                                       
                                             <div class="input-group">
-                                                <button type="submit" class="btn btn-outline-secondary btn-sm">
+                                                <button type="submit" id='{{ $produit->id }}' class="ajouter btn btn-outline-secondary btn-sm">
                                                     <i class="icofont-plus"></i> Ajouter au panier
                                                 </button>
                                                 <input type="number" name="quantite" value="{{ isset($panier[$produit->id]['quantite']) ? $panier[$produit->id]['quantite'] : 0 }}" class="form-control" style="max-width: 70px;" readonly>
                                             </div>
-                                        </form>
+                                        
                                         @endif
                                         @else
-                                        <form action="{{ route('panier.ajouter', ['id' => $produit->id]) }}" method="POST">
-                                            @csrf
+                                        <!-- si le produit n'a pas  dans le panier -->
+                                        
                                             <div class="input-group">
-                                                <button type="submit" class="btn btn-outline-secondary btn-sm">
+                                                <button type="submit"id="{{$produit->id}}" class=" ajouter btn btn-outline-secondary btn-sm">
                                                     <i class="icofont-plus"></i> Ajouter au panier
                                                 </button>
                                                 <input type="number" name="quantite" value="{{ isset($panier[$produit->id]['quantite']) ? $panier[$produit->id]['quantite'] : 0 }}" class="form-control" style="max-width: 70px;" readonly>
                                             </div>
-                                        </form>
+                                        
                                         @endif
                                         @endif
+                                        <!-- si il n'est pas connecte-->
                                         @else
                                         <div class="input-group">
                                             <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#example2Modal">

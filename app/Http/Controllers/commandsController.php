@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Auth;
 class commandsController extends Controller
 {
 
+    public function message(){
+
+        return response()->json(['Qmzal' => 'Alouoi réussie']);
+    }
     // afficher tous les commands
     public function index($id)
     {

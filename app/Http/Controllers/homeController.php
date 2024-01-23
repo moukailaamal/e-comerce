@@ -19,7 +19,7 @@ class homeController extends Controller
         return view('home', ['produits' => $produits,'categories'=>$categories]);
      }
 
-public function ajouter(Request $request,)
+public function ajouter(Request $request)
 {
     $produit = Produit::find($request->id);
     //declarer la session
@@ -38,12 +38,13 @@ public function ajouter(Request $request,)
         ];
     }
     session()->put('panier', $panier,);
-    return redirect()->back()->with('success', 'Produit ajouté au panier');
+    return response()->json(['message' => 'le produit a ete bien ajouter']);
+
  
 }
 
 // ajouter 1 pour la quantite  a la liste
-public function ajouter2($id)
+public function augmenter($id)
 {
     $panier = session()->get('panier');
     if (isset($panier[$id])) {
@@ -54,7 +55,8 @@ public function ajouter2($id)
     }
 }
     session()->put('panier', $panier,);
-    return redirect()->back()->with('success', 'ajouter la quantite');
+    return response()->json(['message' => 'on a augmenter la quantite de produit']);
+
 }
 public function listpanier()
 {
@@ -73,7 +75,8 @@ public function deminuer($id)
         }
     }
     session()->put('panier', $panier,);
-    return redirect()->back()->with('success', 'Quantité diminuée');
+    return response()->json(['message' => 'la quantite de produits a ete dimunuer']);
+
 }
 
 // pour supprimer
@@ -84,7 +87,8 @@ public function destroy($id)
         unset($panier[$id]);
     }
     session()->put('panier', $panier,);
-    return redirect()->back()->with('success', 'produit supprimer');
+    return response()->json(['message' => 'le produit a ete supprimer dans le panier ']);
+
 }
 
 

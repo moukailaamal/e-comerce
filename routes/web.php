@@ -62,7 +62,7 @@ Route::get('/afficheProduit/{id}', [ProduitsController::class, 'indexProduit'])-
 // le panier 
 Route::middleware(['email.confirmation'])->group(function () {
 
-Route::post('/panier/ajouter2/{id}',[homeController::class,'ajouter2'])->name('panier.ajouter2');
+Route::get('/panier/augmenter/{id}',[homeController::class,'augmenter'])->name('panier.augmenter');
 Route::post('/panier/ajouter',[homeController::class,'ajouter'])->name('panier.ajouter');
 Route::post('panier/deminuer/{id}', [HomeController::class, 'deminuer'])->name('panier.deminuer');
 Route::post('panier/destroy/{id}', [HomeController::class, 'destroy'])->name('panier.destroy');
@@ -76,3 +76,5 @@ Route::post('command/passerCommande', [commandsController::class, 'passerCommand
 });
 
 Route::get('/confirmation/{token}', [ConfirmationController::class,'verify'])->name('confirmation.verify');
+
+Route::get('/message', [commandsController::class, 'message']);

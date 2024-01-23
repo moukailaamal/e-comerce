@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-w3f7F/zEZ8QAzGgGgEszZKVF5mnnFkL69eJf5J4XJrebeIZJ8InFVMZjDfNPQbyXVeNzV1k5FkLQsnj5qPc+f3w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -160,26 +162,22 @@
                                     <div class="col">{{ $prixtotal }}dt</div>
                                     <div class="col d-flex">
 
-                                        <form action="{{ route('panier.deminuer', ['id' => $id]) }}" method="POST">
-                                            @csrf
-                                            <button class="btn btn-sm" type="submit">
+                                       
+                                            <button id="{{$id}}"class=" deminuer btn btn-sm" type="submit">
                                                 <i class="fa fa-minus"></i>
                                             </button>
-                                        </form>
+                                       
 
-                                        <form action="{{ route('panier.destroy', ['id' => $id]) }}" method="POST">
-                                            @csrf
-                                            <button class="btn btn-sm" type="submit">
+                                        
+                                            <button id="{{$id}}" class=" destroy btn btn-sm" type="submit">
                                                 <i class="fa fa-trash"></i>
                                             </button>
-                                        </form>
+                                       
                                       
-                                        <form action="{{ route('panier.ajouter2', ['id' => $id]) }}" method="POST">
-                                            @csrf
-                                            <button class="btn btn-sm" type="submit">
+                                        
+                                            <button id="{{$id}}" class=" augmenter btn btn-sm" type="submit">
                                                 <i class="fa fa-plus"></i>
                                             </button>
-                                        </form>
                                        
                                     </div>
                                 </div>
@@ -306,8 +304,114 @@
             </div>
         </div>
     </footer>
+<script>
+    // ajouter
+ $(document).ready(function() {
+    $('.ajouter').click(function() {
+        $.ajax({
+            type: 'POST',
+            url: '{{ route('panier.ajouter') }}', // Assurez-vous que le nom de la route est correct ici
+            data: {
+                _token: '{{ csrf_token() }}',
+                id: $(this).attr('id'),
+            },
+
+            success: function(response) {
+                $(this).text("Deja ajouter");
+                // Action en cas de succès (par exemple, afficher un message)
+                alert(response.message);
+            },
+            error: function(response) {
+                console.log(response);
+                // Action en cas d'erreur
+                alert('Erreur lors de l\'ajout au panier');
+            }
+        });
+    });
+});
+// augmenter
+$(document).ready(function() {
+    $('.augmenter') .click(function() {
+        // Stocke la référence à this
+        var $this = $(this);
+        var produitId = $this.attr('id');
+
+        $.ajax({
+            type: 'GET',
+            url: '/panier/augmenter/' + produitId,
+    
+
+            success: function(response) {
+               
+                // Action en cas de succès (par exemple, afficher un message)
+                alert(response.message);
+
+            },
+            error: function(response) {
+                console.log(response)
+                // Action en cas d'erreur
+            }
+        });
+    });
+});
+// deminuer
+$(document).ready(function() {
+    $('.deminuer').click(function() {
+        // Stocke la référence à this
+        var $this = $(this);
+        var produitId = $this.attr('id');
+
+        $.ajax({
+            type: 'POST',
+            url: '/panier/deminuer/' + produitId,
+            data: {
+                _token: '{{ csrf_token() }}',
+                id: produitId,
+            },
+
+            success: function(response) {
+                $this.text("on a deminuer la quantité ")
+                // Action en cas de succès (par exemple, afficher un message)
+                alert(response.message);
+
+            },
+            error: function(response) {
+                console.log(response)
+                // Action en cas d'erreur
+            }
+        });
+    });
+});
+// distroy
+$(document).ready(function() {
+    $('.destroy').click(function() {
+        // Stocke la référence à this
+        var $this = $(this);
+        var produitId = $this.attr('id');
+
+        $.ajax({
+            type: 'POST',
+            url: '/panier/destroy/' + produitId,
+            data: {
+                _token: '{{ csrf_token() }}',
+                id: produitId,
+            },
+
+            success: function(response) {
+                $this.text("le produit est supprimer ")
+                // Action en cas de succès (par exemple, afficher un message)
+                alert(response.message);
+
+            },
+            error: function(response) {
+                console.log(response)
+                // Action en cas d'erreur
+            }
+        });
+    });
+});
+</script>
     <script src="https://kit.fontawesome.com/14273d579a.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
